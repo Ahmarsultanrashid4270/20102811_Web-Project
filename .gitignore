@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Environment Variables (Keep local secrets safe)
+.env.local
+
+# Production Build Artifacts
+dist/
+build/
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+*.log
+
+# Internal Student Prep Notes, Urdu Guides & Lecturer Briefs (Local Only)
+docs/*URDU*
+docs/*Urdu*
+docs/PRESENTATION_AND_DEMO_GUIDE.md
+Web Dev Ass B.pdf
+standalone-demo.html
