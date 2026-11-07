@@ -1,40 +1,55 @@
 // ==============================================================================
 // DATABASE CONFIGURATION (backend/src/config/db.js)
-// MongoDB Database Connection Setup
+// MongoDB Database Connection Setup with Serverless Connection Caching
 // Roman Urdu Comments: Har line ki asaan wazahat
 // ==============================================================================
 
-// 1. Mongoose library ko import karna (Node.js aur MongoDB ke darmiyan ka translator)
+// 1. Mongoose library ko import karna (Node.js aur MongoDB ke darmiyan translator)
 const mongoose = require('mongoose');
 
+// Default Atlas connection string (fallback agar cloud environment variable missing ho)
+const DEFAULT_MONGO_URI = 'mongodb+srv://chahmar42705_db_user:BNNrcLODgDpAT8Ep@cluster0.qtigs1o.mongodb.net/donation_management?retryWrites=true&w=majority';
+
+// 2. Serverless environment ke liye connection caching
+// Vercel serverless functions mein har request par naya connection banne se bachata hai
+let cached = global.mongoose;
+
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
+
 /**
- * MongoDB se connect karne ka asynchronous function
+ * MongoDB se connect karne ka asynchronous function (Cached for Serverless)
  */
 const connectDB = async () => {
-  // 2. Connection URI (URL):
-  // Agar .env mein MONGODB_URI di ho toh woh uthao, warna local computer ka default URL use karo
-  const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017/donation_management';
-  
-  try {
-    // 3. Mongoose ke connect method se MongoDB ko call milana
-    const conn = await mongoose.connect(uri, {
-      serverSelectionTimeoutMS: 5000, // Agar 5 second mein database na milay toh ruk jao
-      autoIndex: true                 // Unique email index khud ba khud bana lo
-    });
+  // Agar pehle se connected hai toh wohi connection return kar do
+  if (cached.conn && mongoose.connection.readyState === 1) {
+    return cached.conn;
+  }
 
-    // 4. Kamyabi par message print karna (Host aur Database ka naam)
-    console.log(`[MongoDB] Database se kamyabi se connection ban gaya: ${conn.connection.host}/${conn.connection.name}`);
-    return conn;
+  // Environment variable se URI lo warna default Atlas cluster ka URI use karo
+  const uri = process.env.MONGODB_URI || DEFAULT_MONGO_URI;
+
+  if (!cached.promise) {
+    const opts = {
+      bufferCommands: false,
+      serverSelectionTimeoutMS: 10000,
+      autoIndex: true
+    };
+
+    cached.promise = mongoose.connect(uri, opts).then((m) => {
+      console.log(`[MongoDB] Database se kamyabi se connection ban gaya: ${m.connection.host}/${m.connection.name}`);
+      return m;
+    });
+  }
+
+  try {
+    cached.conn = await cached.promise;
+    return cached.conn;
   } catch (error) {
-    // 5. Agar MongoDB band ho ya connection fail ho jaye:
+    cached.promise = null;
     console.error(`[MongoDB Connection Error] Raabta nahi ho saka: ${error.message}`);
-    console.warn(`[MongoDB Warning] Database ke baghair chal raha hai. MONGODB_URI check karein.`);
-    
-    // 6. Production mein crash karo, lekin development/academic evaluation mein
-    // process ko band nahi karte taake student ki app band na ho
-    if (process.env.NODE_ENV === 'production') {
-      process.exit(1);
-    }
+    return null;
   }
 };
 

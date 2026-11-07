@@ -1,6 +1,6 @@
 // ==============================================================================
 // MAIN SERVER ENTRY POINT (backend/server.js)
-// KindredHeart — Donation Management System
+// KindredHeart - Donation Management System
 // Roman Urdu Comments: Har line ki asaan wazahat
 // ==============================================================================
 
@@ -26,13 +26,13 @@ const externalApiRoutes = require('./src/routes/externalApiRoutes'); // Live cur
 // 6. Express application ka main instance create karna
 const app = express();
 
-// 7. MongoDB Database se connection establish karna
+// 7. Initial MongoDB Database connection call
 connectDB();
 
 // 8. CORS Middleware configure karna
 // Yeh frontend browser ko bataata hai ke requests allow hain
 app.use(cors({
-  origin: '*', // Har address se request qabool karo (Development ke liye open)
+  origin: '*', // Har address se request qabool karo
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP actions
   allowedHeaders: ['Content-Type', 'Authorization'] // Headers jo client bhej sakta hai
 }));
@@ -44,12 +44,23 @@ app.use(express.json());
 // URL-encoded form data ko parse karne ke liye
 app.use(express.urlencoded({ extended: true }));
 
+// Serverless DB connection middleware: API calls chalne se pehle DB connection ensure karta hai
+app.use(async (req, res, next) => {
+  if (req.path.startsWith('/api') && req.path !== '/api/health') {
+    try {
+      await connectDB();
+    } catch (e) {
+      console.error('[DB Middleware Error]', e.message);
+    }
+  }
+  next();
+});
+
 // 10. Health Check Route (Server ki sehat check karne ka rasta)
-// Agar koi http://localhost:5000/api/health khole toh status milta hai
 app.get('/api/health', (req, res) => {
   res.status(200).json({
     status: 'online',
-    message: 'Donation Management System API theek chal rahi hai',
+    message: 'Donation Management System API is healthy',
     timestamp: new Date().toISOString()
   });
 });
@@ -65,7 +76,7 @@ app.use('/api/external', externalApiRoutes); // /api/external/currency-rates
 app.use((req, res, next) => {
   res.status(404).json({
     success: false,
-    message: `API Route mojood nahi hai: ${req.method} ${req.originalUrl}`
+    message: `API Route not found: ${req.method} ${req.originalUrl}`
   });
 });
 
@@ -75,7 +86,7 @@ app.use((err, req, res, next) => {
   console.error('[Unhandled Error]', err.stack);
   res.status(err.status || 500).json({
     success: false,
-    message: err.message || 'Server par koi masla aa gaya hai',
+    message: err.message || 'Internal server error occurred',
     // Agar development mode hai toh error detail dikhao
     error: process.env.NODE_ENV === 'development' ? err.message : undefined
   });
@@ -84,11 +95,9 @@ app.use((err, req, res, next) => {
 // 14. Server ko port par start (listen) karna
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`\n======================================================`);
-  console.log(`🚀 Donation Management Server is running on port: ${PORT}`);
-  console.log(`🌐 Base URL: http://localhost:${PORT}/api/health`);
-  console.log(`======================================================\n`);
+  console.log(`Donation Management Server running on port ${PORT}`);
+  console.log(`Base URL: http://localhost:${PORT}/api/health`);
 });
 
-// Test suite ya doosre modules ke liye app ko export karna
+// Test suite ya serverless lambda ke liye app ko export karna
 module.exports = app;
