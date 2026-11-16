@@ -14,7 +14,9 @@ build/
 Thumbs.db
 *.log
 
-# Internal Student Prep Notes, Urdu Guides & Lecturer Briefs (Local Only)
+# Internal Guides, Intermediate HTML & Markdown Reports (Local Only)
+docs/*.html
+docs/*.md
 docs/*URDU*
 docs/*Urdu*
 docs/PRESENTATION_AND_DEMO_GUIDE.md
