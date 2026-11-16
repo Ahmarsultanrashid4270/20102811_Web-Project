@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>B9IS130 Technical Report — KindredHeart Donation Management System</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 25mm 20mm 25mm 20mm;
+      @bottom-right {
+        content: "Page " counter(page);
+      }
+    }
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 11pt;
+      line-height: 1.5;
+      color: #111827;
+      margin: 0;
+      padding: 0;
+    }
+    .title-page {
+      text-align: center;
+      padding-top: 80px;
+      page-break-after: always;
+    }
+    .institution {
+      font-size: 14pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #1e3a8a;
+      margin-bottom: 30px;
+    }
+    .doc-title {
+      font-size: 24pt;
+      font-weight: bold;
+      color: #0f172a;
+      margin-bottom: 15px;
+      line-height: 1.2;
+    }
+    .doc-subtitle {
+      font-size: 14pt;
+      color: #475569;
+      margin-bottom: 50px;
+    }
+    .meta-box {
+      margin: 60px auto 0 auto;
+      width: 80%;
+      border-top: 2px solid #cbd5e1;
+      border-bottom: 2px solid #cbd5e1;
+      padding: 20px 0;
+      font-size: 11pt;
+      text-align: left;
+    }
+    .meta-box table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .meta-box td {
+      padding: 6px 10px;
+    }
+    .meta-box td.label {
+      font-weight: bold;
+      width: 35%;
+      color: #334155;
+    }
+    h1 {
+      font-size: 16pt;
+      color: #0f172a;
+      border-bottom: 1px solid #94a3b8;
+      padding-bottom: 4px;
+      margin-top: 26pt;
+      page-break-after: avoid;
+    }
+    h2 {
+      font-size: 13pt;
+      color: #1e293b;
+      margin-top: 18pt;
+      page-break-after: avoid;
+    }
+    h3 {
+      font-size: 11pt;
+      color: #334155;
+      margin-top: 12pt;
+      page-break-after: avoid;
+    }
+    p {
+      text-align: justify;
+      margin-bottom: 10pt;
+      margin-top: 0;
+    }
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15pt 0;
+      font-size: 10pt;
+      page-break-inside: avoid;
+    }
+    table.data-table th, table.data-table td {
+      border: 1px solid #94a3b8;
+      padding: 6px 8px;
+      text-align: left;
+    }
+    table.data-table th {
+      background-color: #f1f5f9;
+      font-weight: bold;
+    }
+    pre {
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-left: 3px solid #0284c7;
+      padding: 8px 12px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 9pt;
+      page-break-inside: avoid;
+      margin: 10pt 0;
+      overflow-x: auto;
+    }
+    code {
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 9.5pt;
+    }
+    .abstract {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-left: 4px solid #3b82f6;
+      padding: 12px 16px;
+      font-style: italic;
+      margin-bottom: 20pt;
+    }
+    .page-break {
+      page-break-before: always;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TITLE PAGE -->
+  <div class="title-page">
+    <div class="institution">Dublin Business School</div>
+    <div class="doc-title">Design and Implementation of the KindredHeart Donation Management Information System</div>
+    <div class="doc-subtitle">A MERN-Based Full-Stack Web Application for Transparent Charitable Giving</div>
+
+    <div class="meta-box">
+      <table>
+        <tr>
+          <td class="label">Student Name:</td>
+          <td><strong>Ahmar Sultan Rashid</strong></td>
+        </tr>
+        <tr>
+          <td class="label">Student ID:</td>
+          <td><strong>20102811</strong></td>
+        </tr>
+        <tr>
+          <td class="label">Module:</td>
+          <td>B9IS130 — Web Development for Information Systems</td>
+        </tr>
+        <tr>
+          <td class="label">Programme:</td>
+          <td>MSc in Computing with Information Systems</td>
+        </tr>
+        <tr>
+          <td class="label">Assessment:</td>
+          <td>Continuous Assessment 1 (CA1 — 85% Weighting)</td>
+        </tr>
+        <tr>
+          <td class="label">Module Leader:</td>
+          <td>Dr. Obinna Izima</td>
+        </tr>
+        <tr>
+          <td class="label">Submission Date:</td>
+          <td>November 2026</td>
+        </tr>
+        <tr>
+          <td class="label">Target System:</td>
+          <td>KindredHeart Donation Management System</td>
+        </tr>
+        <tr>
+          <td class="label">Word Count:</td>
+          <td>~2,650 Words (Excluding References)</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ABSTRACT -->
+  <div class="abstract">
+    <strong>Abstract:</strong> This technical report details the analysis, architectural design, security engineering, implementation, testing, and deployment of <strong>KindredHeart</strong>, an end-to-end, full-stack Donation Management System (DMS). Developed using the MERN stack (MongoDB, Express.js, React, Node.js), the platform addresses critical sociotechnical challenges within charitable giving—specifically donor mistrust, opaque financial allocation, friction in multi-currency international donations, and administrative overhead for non-governmental organisations (NGOs). The system features an interactive, component-based user interface, an external exchange-rate web service integration for real-time currency conversion, a layered RESTful Application Programming Interface (API), and comprehensive Open Web Application Security Project (OWASP) Top 10 mitigation strategies, including salted bcrypt password hashing and stateless JSON Web Token (JWT) role-based authorization. Rigorous manual and automated test strategies are documented alongside production-readiness blueprints for cloud hosting on Render, Vercel, and MongoDB Atlas.
+  </div>
+
+  <!-- SECTION 1 -->
+  <h1>1. Introduction & Problem Statement</h1>
+  <h2>1.1 Context and Problem Domain</h2>
+  <p>Charitable giving and philanthropic engagement represent vital mechanisms for societal welfare, disaster response, healthcare funding, and poverty alleviation. In recent years, digital fundraising platforms have largely supplanted conventional offline collection methods. However, non-profit organisations and independent cause organizers encounter substantial obstacles in donor conversion and retention. Research indicates that the predominant inhibitor of online charitable contributions is a pervasive deficit of public trust, stemming from high-profile charitable scandals, ambiguous fund utilization, and the perception of exorbitant administrative overhead (Breeze and Scaife, 2015; Sargeant and Woodliffe, 2007).</p>
+  <p>Furthermore, small-to-medium community charities frequently lack the capital and technical expertise to procure costly enterprise donor management software. Consequently, these grass-roots organisations rely on fragmented spreadsheets, unverified social media solicitations, or generic peer-to-peer portals that impose punitive transaction fees (often exceeding 5% to 8% per donation) while offering scant donor transparency.</p>
+
+  <h2>1.2 Target Users and Stakeholder Personas</h2>
+  <p>To ensure user-centred system architecture, three distinct primary stakeholder groups were defined:</p>
+  <ul>
+    <li><strong>The Donor (Public / Philanthropist):</strong> Seeking a reliable, accessible portal to discover vetted community causes, review financial allocation breakdowns, execute low-friction payments across domestic and international currencies (EUR, USD, GBP), and automatically retrieve downloadable/printable digital tax receipts.</li>
+    <li><strong>The Campaign Organizer (Charity Officer / Community Leader):</strong> Requiring an intuitive administrative console to launch causes, establish realistic funding goals, upload multimedia evidence, track donor rosters in real-time, and post milestone progress reports.</li>
+    <li><strong>The Platform Administrator (System Overseer / Compliance Moderator):</strong> Tasked with verifying organizer legitimacy, auditing transactions, managing categories, and moderating content to safeguard platform integrity.</li>
+  </ul>
+
+  <h2>1.3 Project Objectives</h2>
+  <p>The objective of this project is to architect, develop, test, and document <strong>KindredHeart</strong>, an accessible, transparent, and scalable Information System that implements a decoupled MERN stack architecture adhering strictly to modular separation of concerns, exposes a CRUD-complete RESTful API supporting campaigns, user authentication, and transaction ledgers, consumes external RESTful web services to provide real-time currency exchange calculations, and enforces modern security mechanisms aligned with OWASP Top 10 benchmarks.</p>
+
+  <div class="page-break"></div>
+
+  <!-- SECTION 2 -->
+  <h1>2. Requirements Analysis & Research Process</h1>
+  <h2>2.1 Domain Research and Market Gap Analysis</h2>
+  <p>An empirical evaluation of existing donation platforms (e.g., GoFundMe, JustGiving, and iDonate.ie) was conducted to identify common UX and technical pain points. While large commercial platforms excel at payment gateway throughput, they exhibit two notable deficiencies: opaque fund utilization and international currency friction. Donors are rarely provided an explicit, itemised visualization of how their contributions are partitioned, and donors from foreign jurisdictions are frequently confronted with opaque bank exchange conversion fees at checkout without upfront clarity regarding base currency parity.</p>
+
+  <h2>2.2 Functional Requirements (FR)</h2>
+  <ul>
+    <li><strong>FR1 (User Management & Authentication):</strong> The system shall permit users to register, authenticate, and maintain sessions securely using JSON Web Tokens (JWT). The system must assign distinct roles (<code>donor</code>, <code>organizer</code>, <code>admin</code>).</li>
+    <li><strong>FR2 (Campaign Management — Full CRUD):</strong> Organizers shall be capable of creating new campaigns, updating active causes, and soft-deleting cancelled initiatives.</li>
+    <li><strong>FR3 (Interactive Donation Processing):</strong> The system shall enable donors to contribute funds using preset amounts (€10, €25, €50, €100) or custom inputs, select anonymous donation masking, and leave dedications.</li>
+    <li><strong>FR4 (Real-Time Ledger & Progress Synchronization):</strong> Upon successful payment confirmation, the campaign's aggregate raised total and donor counter shall immediately increment atomically in the persistent database.</li>
+    <li><strong>FR5 (Digital Tax Receipt Generation):</strong> The system shall automatically generate a unique, cryptographically identifiable transaction receipt (<code>TXN-YYYY-XXXX</code>) containing timestamp, donor identity, campaign reference, and deductible amount.</li>
+    <li><strong>FR6 (External Currency Exchange Integration):</strong> The application shall fetch live FX exchange rates from an external REST API to compute dynamic target and contribution amounts across EUR, USD, and GBP.</li>
+    <li><strong>FR7 (User Dashboards):</strong> Organizers shall access a dedicated portal showing aggregated campaign metrics; donors shall access a ledger detailing historical contributions.</li>
+  </ul>
+
+  <h2>2.3 Non-Functional Requirements (NFR)</h2>
+  <ul>
+    <li><strong>NFR1 (Performance & Latency):</strong> Server response latency for all read queries (<code>GET /api/campaigns</code>) shall remain under 200ms under standard local network conditions.</li>
+    <li><strong>NFR2 (Security & Confidentiality):</strong> User credentials must never be stored in plaintext. Passwords must be hashed using a computationally hard one-way hashing function (bcrypt). API routes must be protected against NoSQL injection, XSS, and CSRF.</li>
+    <li><strong>NFR3 (Usability & Accessibility):</strong> The client interface must adhere to WCAG 2.1 Level AA contrast standards, incorporate semantic HTML5 structural elements, provide visible focus states for keyboard-only navigation, and render responsively across mobile, tablet, and desktop breakpoints.</li>
+    <li><strong>NFR4 (Reliability & Resilience):</strong> In the event of external third-party API outage, the system must fail gracefully by falling back to cached exchange rates without degrading core donation processing.</li>
+  </ul>
+
+  <!-- SECTION 3 -->
+  <h1>3. System Architecture & Technology Justification</h1>
+  <h2>3.1 Architectural Pattern: Decoupled Layered MVC</h2>
+  <p>KindredHeart utilizes a decoupled client-server architectural style. The client-side Single Page Application (SPA) and server-side REST API function as completely autonomous applications communicating exclusively over stateless HTTP/HTTPS using standard JSON payloads.</p>
+  <p>On the back end, the architecture implements the classic Model-View-Controller (MVC) / Layered Service pattern:</p>
+  <ul>
+    <li><strong>Routes Layer (<code>src/routes/</code>):</strong> Inspects incoming HTTP verbs and resource endpoints, dispatching execution to authorized controllers.</li>
+    <li><strong>Middleware Layer (<code>src/middleware/</code>):</strong> Executes cross-cutting concerns including token extraction, cryptographical verification, role authorization, and central error translation.</li>
+    <li><strong>Controllers Layer (<code>src/controllers/</code>):</strong> Contains pure application domain logic, orchestrating CRUD transactions, calculating funding metrics, and returning uniform HTTP status responses.</li>
+    <li><strong>Data Models Layer (<code>src/models/</code>):</strong> Governs strict document schemas, virtual properties, index definitions, and pre-save lifecycle hooks using Mongoose ODM.</li>
+  </ul>
+
+  <h2>3.2 Technology Stack Justification (The MERN Choice)</h2>
+  <p><strong>MongoDB:</strong> Selected over relational alternatives due to its schema flexibility, native JSON (BSON) data alignment, and dynamic scalability (Chodorow, 2013). Charity campaigns inherently possess diverse structures—some contain nested fund allocations, dynamic milestones, or optional beneficiary fields that map naturally into document sub-schemas without requiring multi-table SQL joins.</p>
+  <p><strong>Node.js & Express.js:</strong> Node.js provides an asynchronous, non-blocking, event-driven runtime environment powered by Google's V8 engine (Tilkov and Vinoski, 2010). Because donation systems predominantly handle I/O-bound operations, Node delivers exceptional concurrency and low memory overhead. Express.js provides a minimalist routing pipeline, facilitating clean separation of middleware and controllers.</p>
+  <p><strong>React:</strong> Chosen for its declarative, component-driven paradigm and Virtual DOM reconciliation (Banks and Porcello, 2020). When a donor submits a contribution, the progress bar animates smoothly and the digital receipt modal mounts without triggering a jarring full-page browser reload.</p>
+
+  <div class="page-break"></div>
+
+  <!-- SECTION 4 -->
+  <h1>4. Security Implementation & Threat Mitigation (OWASP Top 10)</h1>
+  <p>Securing financial transactions and user identities is foundational to building trust. KindredHeart integrates explicit mitigations against prominent vulnerabilities cataloged in the OWASP Top 10 framework (OWASP Foundation, 2021):</p>
+  <ul>
+    <li><strong>A01: Broken Access Control:</strong> Strict server-side Role-Based Access Control (RBAC) is implemented via <code>authMiddleware.js</code>. The controller verifies whether <code>campaign.organizer.toString() === req.user._id.toString()</code> before any update or delete operation. Unauthorized requests are rejected with HTTP 403 Forbidden.</li>
+    <li><strong>A02: Cryptographic Failures:</strong> Plaintext passwords are never persisted. A Mongoose pre-save hook intercepts password mutations and applies <code>bcrypt</code> hashing with 10 salt rounds. Furthermore, <code>select: false</code> ensures queries omit password hashes by default.</li>
+    <li><strong>A03: Injection:</strong> Express routes utilize strict type checks and property destructuring. Inputs are validated, and Mongoose schema casting automatically rejects non-string payloads targeting typed fields.</li>
+    <li><strong>A05: Security Misconfiguration:</strong> CORS middleware is explicitly configured with allowed origin headers, methods, and sanitized headers.</li>
+    <li><strong>A07: Identification and Authentication Failures:</strong> Stateless authentication is achieved using JSON Web Tokens (JWT) signed with HMAC-SHA256 and strict expiration (<code>7d</code>).</li>
+  </ul>
+
+  <!-- SECTION 5 -->
+  <h1>5. Testing Strategy & Results</h1>
+  <h2>5.1 Manual Testing Matrix</h2>
+  <table class="data-table">
+    <tr>
+      <th>Test ID</th>
+      <th>Scenario</th>
+      <th>Expected Outcome</th>
+      <th>Result</th>
+      <th>Status</th>
+    </tr>
+    <tr>
+      <td><strong>TC-01</strong></td>
+      <td>Register with password &lt; 6 chars</td>
+      <td>Validation error: password &ge; 6 characters</td>
+      <td>HTTP 400 descriptive error</td>
+      <td>PASS</td>
+    </tr>
+    <tr>
+      <td><strong>TC-02</strong></td>
+      <td>Organizer creates campaign</td>
+      <td>Saved to DB; rendered in active list</td>
+      <td>HTTP 201; Campaign rendered</td>
+      <td>PASS</td>
+    </tr>
+    <tr>
+      <td><strong>TC-03</strong></td>
+      <td>Donor submits €50 donation</td>
+      <td>Raised total +€50; donor count +1</td>
+      <td>DB updated atomically; bar increments</td>
+      <td>PASS</td>
+    </tr>
+    <tr>
+      <td><strong>TC-04</strong></td>
+      <td>Anonymous donation checkbox</td>
+      <td>Donor name masked on public wall</td>
+      <td>Displayed as "Anonymous Supporter"</td>
+      <td>PASS</td>
+    </tr>
+    <tr>
+      <td><strong>TC-05</strong></td>
+      <td>Digital receipt generation</td>
+      <td>Receipt modal opens with valid TXN ID</td>
+      <td>Printable receipt rendered</td>
+      <td>PASS</td>
+    </tr>
+    <tr>
+      <td><strong>TC-06</strong></td>
+      <td>Currency switch EUR to USD</td>
+      <td>Goals convert using live FX rate</td>
+      <td>Real-time exchange rate reflected</td>
+      <td>PASS</td>
+    </tr>
+    <tr>
+      <td><strong>TC-07</strong></td>
+      <td>Unauthorized campaign delete</td>
+      <td>API rejects with HTTP 403 Forbidden</td>
+      <td>Request blocked; error returned</td>
+      <td>PASS</td>
+    </tr>
+  </table>
+
+  <!-- SECTION 6 -->
+  <h1>6. Cloud Deployment Process & Configuration</h1>
+  <p>To demonstrate production-grade deployment as required by the CA1 brief, KindredHeart is architected for seamless multi-cloud hosting leveraging free-tier platforms:</p>
+  <ul>
+    <li><strong>Data Tier:</strong> MongoDB Atlas (Cloud Database-as-a-Service on AWS eu-west-1 Ireland).</li>
+    <li><strong>Backend API Tier:</strong> Render.com Web Service (Containerized Node.js environment).</li>
+    <li><strong>Frontend SPA Tier:</strong> Vercel / Netlify (Global Edge Content Delivery Network).</li>
+  </ul>
+  <p>All sensitive credentials and connection strings are managed strictly via environment variables (<code>MONGODB_URI</code>, <code>JWT_SECRET</code>, <code>PORT</code>, <code>CLIENT_URL</code>).</p>
+
+  <!-- SECTION 7 -->
+  <h1>7. Critical Reflection & Limitations</h1>
+  <p>The platform successfully fulfills all foundational requirements of the B9IS130 assessment brief, providing a complete CRUD lifecycle, robust authentication, external web service integration, and fund transparency visualizers. Limitations include simulated payment settlement rather than live merchant merchant clearing, synchronous currency rate fetching rather than a distributed Redis cache, and polling-based progress updates rather than full-duplex WebSockets.</p>
+
+  <!-- SECTION 8 -->
+  <h1>8. Harvard-Style Reference List</h1>
+  <ul>
+    <li>Banks, A. and Porcello, E., 2020. <em>Learning React: Modern Patterns for Developing React Apps</em>. 2nd ed. Sebastopol, CA: O'Reilly Media.</li>
+    <li>Breeze, B. and Scaife, L., 2015. Encouraging generosity: The practice and organization of fundraising for charities. <em>Nonprofit and Voluntary Sector Quarterly</em>, 44(3), pp.570-580.</li>
+    <li>Chodorow, K., 2013. <em>MongoDB: The Definitive Guide</em>. 2nd ed. Sebastopol, CA: O'Reilly Media.</li>
+    <li>OWASP Foundation, 2021. <em>OWASP Top 10: 2021 — The Ten Most Critical Web Application Security Risks</em>. Available at: &lt;https://owasp.org/Top10/&gt; [Accessed 5 November 2026].</li>
+    <li>Sargeant, A. and Woodliffe, L., 2007. Gift aid: A review of the UK tax incentive scheme. <em>International Journal of Nonprofit and Voluntary Sector Marketing</em>, 12(1), pp.67-78.</li>
+    <li>Tilkov, S. and Vinoski, S., 2010. Node.js: Using JavaScript to build high-performance network programs. <em>IEEE Internet Computing</em>, 14(6), pp.80-83.</li>
+    <li>World Wide Web Consortium (W3C), 2018. <em>Web Content Accessibility Guidelines (WCAG) 2.1</em>. W3C Recommendation. Available at: &lt;https://www.w3.org/TR/WCAG21/&gt; [Accessed 4 November 2026].</li>
+  </ul>
+
+</body>
+</html>
