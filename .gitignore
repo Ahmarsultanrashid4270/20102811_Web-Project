@@ -17,6 +17,7 @@ Thumbs.db
 # Internal Guides, Intermediate HTML & Markdown Reports (Local Only)
 docs/*.html
 docs/*.md
+docs/screenshots/
 docs/*URDU*
 docs/*Urdu*
 docs/PRESENTATION_AND_DEMO_GUIDE.md

@@ -1,14 +1,22 @@
-# KindredHeart - Donation Management System
+﻿# KindredHeart - Donation Management System
 
-Student Name: Ahmar Sultan Rashid
-Student ID: 20102811
-Module: B9IS130 - Web Development for Information Systems
-College: Dublin Business School (DBS)
-Module Leader: Dr. Obinna Izima
+Student Name: Ahmar Sultan Rashid  
+Student ID: 20102811  
+Module: B9IS130 - Web Development for Information Systems  
+College: Dublin Business School (DBS)  
+Module Leader: Dr. Obinna Izima  
 
 ---
 
-## 1. About My Project
+## 1. Live Deployment Links
+
+- Frontend Application: https://kindredheart-rosy.vercel.app
+- Backend REST API: https://kindredheart-backend.vercel.app
+- API Campaigns Endpoint: https://kindredheart-backend.vercel.app/api/campaigns
+
+---
+
+## 2. About My Project
 
 KindredHeart is a full-stack web application for donation and charity management. I built this project using the MERN Stack (MongoDB, Express, React, and Node.js).
 
@@ -16,7 +24,7 @@ The goal of this website is to make donating easy, transparent, and trustworthy.
 
 ---
 
-## 2. Key Features
+## 3. Key Features
 
 - User Accounts: Users can register as a Donor (to support causes) or an Organizer (to start a fundraiser).
 - Explore Campaigns: Anyone can search campaigns by name or filter by categories like Healthcare, Education, and Disaster Relief.
@@ -29,17 +37,18 @@ The goal of this website is to make donating easy, transparent, and trustworthy.
 
 ---
 
-## 3. Technologies Used
+## 4. Technologies Used
 
 - Frontend: React.js, Tailwind CSS, Vite
 - Backend: Node.js, Express.js
 - Database: MongoDB and Mongoose
 - Authentication: JSON Web Tokens (JWT) and bcryptjs for password security
 - External API: Live currency exchange rates from open.er-api.com
+- Cloud Hosting: Vercel (Frontend & Backend Serverless) and MongoDB Atlas
 
 ---
 
-## 4. How to Run the Project Locally
+## 5. How to Run the Project Locally
 
 ### Step 1: Start the Backend
 Open terminal and run:
@@ -62,7 +71,7 @@ Open http://localhost:5173 in your browser.
 
 ---
 
-## 5. Test Accounts for Demo
+## 6. Test Accounts for Demo
 
 You can use these ready-made test accounts to test the project:
 
@@ -72,4 +81,5 @@ You can use these ready-made test accounts to test the project:
 | Organizer | organizer@redcross.org | password123 |
 | Donor | donor@student.dbs.ie | password123 |
 
-Note: You can also use the 1-click fill buttons on the login page during testing.
+Note: You can also use the 1-click demo fill buttons on the login page during testing.
+

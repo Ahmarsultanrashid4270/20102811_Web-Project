@@ -1,4 +1,4 @@
-// ==============================================================================
+﻿// ==============================================================================
 // MAIN SERVER ENTRY POINT (backend/server.js)
 // KindredHeart - Donation Management System
 // Roman Urdu Comments: Har line ki asaan wazahat
@@ -56,12 +56,19 @@ app.use(async (req, res, next) => {
   next();
 });
 
-// 10. Health Check Route (Server ki sehat check karne ka rasta)
-app.get('/api/health', (req, res) => {
+// 10. Root aur Health Check Routes (Root /, /api aur /api/health sab par response dena)
+app.get(['/', '/api', '/api/health'], (req, res) => {
   res.status(200).json({
+    success: true,
     status: 'online',
-    message: 'Donation Management System API is healthy',
-    timestamp: new Date().toISOString()
+    message: 'KindredHeart Donation Management System API is running successfully',
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      campaigns: '/api/campaigns',
+      auth: '/api/auth',
+      donations: '/api/donations',
+      currencyRates: '/api/external/currency-rates'
+    }
   });
 });
 
@@ -101,3 +108,4 @@ app.listen(PORT, () => {
 
 // Test suite ya serverless lambda ke liye app ko export karna
 module.exports = app;
+
